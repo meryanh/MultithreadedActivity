@@ -12,13 +12,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.concurrent.ExecutionException;
 
 
 public class Multithreading extends ActionBarActivity {
@@ -53,7 +48,6 @@ public class Multithreading extends ActionBarActivity {
         @Override
         protected Void doInBackground(String... params) {
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-            System.out.println("LoadFile started");
             try {
                 BufferedReader inputReader = new BufferedReader(new InputStreamReader(
                         openFileInput("numbers.txt")));
@@ -67,7 +61,6 @@ public class Multithreading extends ActionBarActivity {
                 }
                 stringArray = (stringBuffer.toString()).split("\\r?\\n");
             } catch (Exception e) {
-                System.out.println("ERROR!");
                 e.printStackTrace();
             }
             return null;
