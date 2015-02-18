@@ -46,40 +46,41 @@ public class Multithreading extends ActionBarActivity {
         }
     }
 
-    private class LoadFile extends AsyncTask<String, Void, String> {
+    private class LoadFile extends AsyncTask<String, Void, Void> {
+
+        String[] stringArray;
 
         @Override
-        protected String doInBackground(String... params) {
-            ProgressBar progressBar = (ProgressBar)findViewById(R.id.progressBar);
+        protected Void doInBackground(String... params) {
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             System.out.println("LoadFile started");
-            String string = null;
-
             try {
                 BufferedReader inputReader = new BufferedReader(new InputStreamReader(
                         openFileInput("numbers.txt")));
                 String inputString;
                 StringBuffer stringBuffer = new StringBuffer();
-                int i = 0;
+                int i = 1;
                 while ((inputString = inputReader.readLine()) != null) {
                     stringBuffer.append(inputString + "\n");
-                    System.out.println(inputString);
                     progressBar.setProgress(i++);
                     Thread.sleep(250);
                 }
-                string  = (stringBuffer.toString());
-                String[]  stringArray= string.split("\\r?\\n");
-                ArrayAdapter<String> adapter;
-                adapter = new ArrayAdapter<String>
-                        (context, android.R.layout.simple_list_item_1, stringArray);
-                ListView myList = (ListView)findViewById(R.id.listView);
-                myList.setAdapter(adapter);
-
+                stringArray = (stringBuffer.toString()).split("\\r?\\n");
             } catch (Exception e) {
                 System.out.println("ERROR!");
                 e.printStackTrace();
             }
-            System.out.println(string);
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void v) {
+            ArrayAdapter<String> adapter;
+            adapter = new ArrayAdapter<String>
+                    (context, android.R.layout.simple_list_item_1, stringArray);
+            ListView myList = (ListView)findViewById(R.id.listView);
+            myList.setAdapter(adapter);
+            adapter.addAll();
         }
     }
 
@@ -127,7 +128,12 @@ public class Multithreading extends ActionBarActivity {
 
     /** Called when the user clicks the Load button */
     public void messageLoad(View view) {
+        try {
             new LoadFile().execute("");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
